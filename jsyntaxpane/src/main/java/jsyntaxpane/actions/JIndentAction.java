@@ -69,6 +69,8 @@ public class JIndentAction extends DefaultSyntaxAction {
 			}
 		} else if (lineToPos.trim().endsWith("{")) {
 			prefix += ActionUtils.getTab(target);
+		} else if (lineToPos.length() < prefix.length()) {
+			prefix = lineToPos;
 		} else {
 			String noComment = sDoc.getUncommentedText(start, pos); // skip EOL comments
 
