@@ -41,7 +41,9 @@ public class UnindentAction extends DefaultSyntaxAction {
             } else if (line.startsWith("\t")) {
                 sb.append(line.substring(1));
             } else {
-                sb.append(line);
+                // remove any residual line indent (i.e. < tab-size spaces)
+                String lineIndent = ActionUtils.getIndent(line);
+                sb.append(line.substring(lineIndent.length()));
             }
             sb.append('\n');
         }

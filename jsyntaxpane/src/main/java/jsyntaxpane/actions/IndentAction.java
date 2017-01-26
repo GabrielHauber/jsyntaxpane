@@ -50,12 +50,9 @@ public class IndentAction extends DefaultSyntaxAction {
 		if (selected == null) {
 			// Check for abbreviations:
 			Token abbrToken = sDoc.getWordAt(dot, wordsPattern);
-			Integer tabStop = ActionUtils.getTabSize(target);
-			int lineStart = sDoc.getParagraphElement(dot).getStartOffset();
-			int column = dot - lineStart;
-			int needed = tabStop - (column % tabStop);
 			if (abbrvs == null || abbrToken == null) {
-				target.replaceSelection(ActionUtils.SPACES.substring(0, needed));
+				// insertTabInLine(target, sDoc, dot);
+				indentSelectedLines(target);
 			} else {
 				String abbr = abbrToken.getString(sDoc);
 				if (abbrvs.containsKey(abbr)) {
@@ -68,10 +65,24 @@ public class IndentAction extends DefaultSyntaxAction {
 						ActionUtils.insertSimpleTemplate(target, abbr);
 					}
 				} else {
-					target.replaceSelection(ActionUtils.SPACES.substring(0, needed));
+					// insertTabInLine(target, sDoc, dot);
+					indentSelectedLines(target);
 				}
 			}
 		} else {
+			indentSelectedLines(target);
+		}
+	}
+
+	private void insertTabInLine(JTextComponent target, SyntaxDocument sDoc, int dot) {
+		Integer tabStop = ActionUtils.getTabSize(target);
+		int lineStart = sDoc.getParagraphElement(dot).getStartOffset();
+		int column = dot - lineStart;
+		int needed = tabStop - (column % tabStop);
+		target.replaceSelection(ActionUtils.SPACES.substring(0, needed));
+	}
+
+	private void indentSelectedLines(JTextComponent target) {
 			String[] lines = ActionUtils.getSelectedLines(target);
 			int start = target.getSelectionStart();
 			StringBuilder sb = new StringBuilder();
@@ -82,8 +93,8 @@ public class IndentAction extends DefaultSyntaxAction {
 			}
 			target.replaceSelection(sb.toString());
 			target.select(start, start + sb.length());
-		}
 	}
+
 	private Pattern wordsPattern = Pattern.compile("\\w+");
 
 	public void setWordRegex(String regex) {
