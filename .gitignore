@@ -1,1 +1,6 @@
 /jsyntaxpane/target/
+.DS_Store
+
+# IntelliJ IDEA related files
+.idea
+*.iml
