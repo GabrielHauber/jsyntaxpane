@@ -58,6 +58,10 @@ public final class SyntaxStyle {
         this.fontStyle = Integer.decode(parts[1]);
     }
 
+    public String getStyleString() {
+        return getColorString() + "," + getFontStyle();
+    }
+
     public boolean isBold() {
         return (fontStyle & Font.BOLD) != 0;
     }
@@ -77,6 +81,10 @@ public final class SyntaxStyle {
 
     public void setColorString(String color) {
         this.color = Color.decode(color);
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public Boolean isItalic() {

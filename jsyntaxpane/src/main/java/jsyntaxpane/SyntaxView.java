@@ -38,10 +38,10 @@ public class SyntaxView extends PlainView {
     public static final String PROPERTY_SINGLE_COLOR_SELECT = "SingleColorSelect";
     private static final Logger log = Logger.getLogger(SyntaxView.class.getName());
     private SyntaxStyle DEFAULT_STYLE = SyntaxStyles.getInstance().getStyle(TokenType.DEFAULT);
-    private final boolean singleColorSelect;
-    private final int rightMarginColumn;
-    private final Color rightMarginColor;
-    private final SyntaxStyles styles;
+    private boolean singleColorSelect;
+    private int rightMarginColumn;
+    private Color rightMarginColor;
+    private SyntaxStyles styles;
 
     /**
      * Construct a new view using the given configuration and prefix given
@@ -51,6 +51,10 @@ public class SyntaxView extends PlainView {
      */
     public SyntaxView(Element element, Configuration config) {
         super(element);
+        loadStyles(config);
+    }
+
+    final public void loadStyles(Configuration config) {
         singleColorSelect = config.getBoolean(PROPERTY_SINGLE_COLOR_SELECT, false);
         rightMarginColor = new Color(config.getInteger(PROPERTY_RIGHT_MARGIN_COLOR,
                 0xFF7777));
