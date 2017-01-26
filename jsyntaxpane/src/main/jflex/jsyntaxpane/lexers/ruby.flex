@@ -57,7 +57,9 @@ InputCharacter = [^\r\n]
 WhiteSpace = {LineTerminator} | [ \t\f]+
 
 /* comments */
-Comment = "#" {InputCharacter}* {LineTerminator}?
+Comment = {MultiLineComment} | {EndOfLineComment}
+MultiLineComment = "=begin" ~"=end"
+EndOfLineComment = "#" {InputCharacter}* {LineTerminator}?
 
 /* identifiers */
 Identifier = [a-zA-Z][a-zA-Z0-9_]*
