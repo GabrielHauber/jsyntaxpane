@@ -83,16 +83,38 @@ public class IndentAction extends DefaultSyntaxAction {
 	}
 
 	private void indentSelectedLines(JTextComponent target) {
-			String[] lines = ActionUtils.getSelectedLines(target);
-			int start = target.getSelectionStart();
-			StringBuilder sb = new StringBuilder();
-			for (String line : lines) {
-				sb.append(ActionUtils.getTab(target));
-				sb.append(line);
-				sb.append('\n');
-			}
-			target.replaceSelection(sb.toString());
-			target.select(start, start + sb.length());
+		String[] lines = ActionUtils.getSelectedLines(target);
+		String tabSpaces = ActionUtils.getTab(target);
+		int start = target.getSelectionStart();
+
+		switch (lines.length) {
+			case 0:
+				target.replaceSelection(tabSpaces);
+				break;
+
+			case 1:
+				String lineContent = lines[0];
+				String newLine = tabSpaces + lineContent;
+				int documentLength = target.getDocument().getLength();
+				int originalLineEnd = start + lineContent.length();
+				int newLineEnd = start + newLine.length();
+				if (originalLineEnd < documentLength) {
+					newLine = newLine + '\n';
+				}
+				target.replaceSelection(newLine);
+				target.select(newLineEnd, newLineEnd);
+				break;
+
+			default:
+				StringBuilder sb = new StringBuilder();
+				for (String line : lines) {
+					sb.append(tabSpaces);
+					sb.append(line);
+					sb.append('\n');
+				}
+				target.replaceSelection(sb.toString());
+				target.select(start, start + sb.length());
+		}
 	}
 
 	private Pattern wordsPattern = Pattern.compile("\\w+");
