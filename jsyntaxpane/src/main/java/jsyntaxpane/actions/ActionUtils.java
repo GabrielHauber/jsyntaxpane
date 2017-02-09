@@ -19,6 +19,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -103,8 +104,13 @@ public class ActionUtils {
 				// so that we do not select the line with the caret and no selection in it
 				end = pDoc.getParagraphElement(target.getSelectionEnd() - 1).getEndOffset();
 			}
+			end = Math.min(pDoc.getLength(), end);
 			target.select(start, end);
-			lines = pDoc.getText(start, end - start).split("\n");
+			String linesText = pDoc.getText(start, end - start);
+			lines = linesText.split("\n", -1);
+			if (linesText.endsWith("\n")) {
+				lines = Arrays.copyOf(lines, lines.length - 1);
+			}
 			target.select(start, end);
 		} catch (BadLocationException ex) {
 			Logger.getLogger(ActionUtils.class.getName()).log(Level.SEVERE, null, ex);

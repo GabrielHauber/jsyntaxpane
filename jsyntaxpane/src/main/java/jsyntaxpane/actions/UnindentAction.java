@@ -31,9 +31,13 @@ public class UnindentAction extends DefaultSyntaxAction {
     @Override
     public void actionPerformed(JTextComponent target, SyntaxDocument sDoc,
             int dot, ActionEvent e) {
-        String indent = ActionUtils.getTab(target);
         String[] lines = ActionUtils.getSelectedLines(target);
+        if (lines.length == 0) {
+            return;
+        }
+        String indent = ActionUtils.getTab(target);
         int start = target.getSelectionStart();
+
         StringBuilder sb = new StringBuilder();
         for (String line : lines) {
             if (line.startsWith(indent)) {
@@ -48,6 +52,11 @@ public class UnindentAction extends DefaultSyntaxAction {
             sb.append('\n');
         }
         target.replaceSelection(sb.toString());
-        target.select(start, start + sb.length());
+
+        if (lines.length == 1) {
+            target.select(start + sb.length() - 1, start + sb.length() - 1);
+        } else {
+            target.select(start, start + sb.length());
+        }
     }
 }

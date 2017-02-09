@@ -84,18 +84,19 @@ public class IndentAction extends DefaultSyntaxAction {
 
 	private void indentSelectedLines(JTextComponent target) {
 		String[] lines = ActionUtils.getSelectedLines(target);
-		String tabSpaces = ActionUtils.getTab(target);
+		String indent = ActionUtils.getTab(target);
 		int start = target.getSelectionStart();
+		int end = target.getSelectionEnd();
+		int documentLength = target.getDocument().getLength();
 
 		switch (lines.length) {
 			case 0:
-				target.replaceSelection(tabSpaces);
+				target.replaceSelection(indent);
 				break;
 
 			case 1:
 				String lineContent = lines[0];
-				String newLine = tabSpaces + lineContent;
-				int documentLength = target.getDocument().getLength();
+				String newLine = indent + lineContent;
 				int originalLineEnd = start + lineContent.length();
 				int newLineEnd = start + newLine.length();
 				if (originalLineEnd < documentLength) {
@@ -108,7 +109,7 @@ public class IndentAction extends DefaultSyntaxAction {
 			default:
 				StringBuilder sb = new StringBuilder();
 				for (String line : lines) {
-					sb.append(tabSpaces);
+					sb.append(indent);
 					sb.append(line);
 					sb.append('\n');
 				}
