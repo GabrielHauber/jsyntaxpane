@@ -247,7 +247,7 @@ public class ActionUtils {
 		int column) {
 		int lineHeight = editor.getFontMetrics(editor.getFont()).getHeight();
 		int charWidth = editor.getFontMetrics(editor.getFont()).charWidth('m');
-		int y = (line - 1) * lineHeight;
+		int y = line * lineHeight;
 		int x = column * charWidth;
 		Point pt = new Point(x, y);
 		int pos = editor.viewToModel(pt);
